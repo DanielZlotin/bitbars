@@ -1,13 +1,6 @@
 #!/bin/bash
 
-# <bitbar.title>AirPods Power</bitbar.title>
-# <bitbar.version>v1.0</bitbar.version>
-# <bitbar.author>Gonzalo Serrano Revuelta</bitbar.author>
-# <bitbar.author.github>gonzaloserrano</bitbar.author.github>
-# <bitbar.desc>Displays AirPods battery</bitbar.desc>
-# <bitbar.dependencies>bash</bitbar.dependencies>
-
-# Based on AirPods Battery CLI, Version 2.3 - https://github.com/duk242/AirPodsBatteryCLI
+# Prints airpods battery status
 
 OUTPUT='🎧'
 BLUETOOTH_DEFAULTS=$(defaults read /Library/Preferences/com.apple.Bluetooth)

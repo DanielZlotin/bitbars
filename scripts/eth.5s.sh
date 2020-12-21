@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Prints eth price and gas
+
 API_TOKEN="***REMOVED***"
 etherscanEthUrl="https://api.etherscan.io/api?module=stats&action=ethprice&apikey=$API_TOKEN"
 etherscanGasUrl="https://api.etherscan.io/api?module=gastracker&action=gasoracle&apikey=$API_TOKEN"

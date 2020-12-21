@@ -1,5 +1,7 @@
 #!/bin/bash -e
 
+# Checks metamask version and alerts if changed
+
 STATUS=1
 
 hardcodedKnownVersion="8.1.9"
