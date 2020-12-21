@@ -18,25 +18,25 @@ function writeVersion() {
 }
 
 function readVersion() {
-	echo $(defaults read "$persistDomain" "$persistKey" 2>/dev/null || echo "$hardcodedKnownVersion")
+	defaults read "$persistDomain" "$persistKey" 2>/dev/null || echo "$hardcodedKnownVersion"
 }
 
 function getMetamaskVersionForUser() {
 	userName="$1"
 	metamaskDir="$chromeDir/$userName/$extensionsDir/$metamaskId"
+	# shellcheck disable=SC2012
 	lastDir=$(ls "$metamaskDir" | tail -1)
 	manifest="$metamaskDir/$lastDir/manifest.json"
 
-	version=$(python -c """import json; print json.load(open('$manifest'))['version']""")
-	echo "$version"
+	python -c """import json; print json.load(open('$manifest'))['version']"""
 }
 
 function alertMetamaskUpdated() {
 	stableBtn="Mark Stable"
 	snoozeBtn="Snooze"
-	buttonPressed=$(osascript -e "display alert \"Warning! MetaMask was updated!\" message \"last known version: $lastKnownVersion\n new version: $detectedVersion\" buttons {\"$stableBtn\",\"$snoozeBtn\"}")
+	buttonPressed=$(osascript -e "display alert \"Warning! MetaMask was updated!\" message \"last known version: $1\n new version: $2\" buttons {\"$stableBtn\",\"$snoozeBtn\"}")
 	if [[ "$buttonPressed" == "button returned:$stableBtn" ]]; then
-		writeVersion "$detectedVersion"
+		writeVersion "$2"
 		STATUS=1
 	fi
 }
@@ -47,7 +47,7 @@ detectedVersion=$(getMetamaskVersionForUser "Default")
 
 if [ "$detectedVersion" != "$lastKnownVersion" ]; then
 	STATUS=0
-	alertMetamaskUpdated
+	alertMetamaskUpdated "$lastKnownVersion" "$detectedVersion"
 fi
 
 [ $STATUS == 1 ] && echo "🟢" || echo "🔴"
