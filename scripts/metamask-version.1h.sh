@@ -32,8 +32,9 @@ function getMetamaskVersionForUser() {
 }
 
 function alertMetamaskUpdated() {
-	stableBtn="mark stable"
-	buttonPressed=$(osascript -e "display alert \"Warning! MetaMask was updated!\" message \"last known version: $lastKnownVersion\n new version: $detectedVersion\" buttons {\"$stableBtn\",\"well fuck...\"}")
+	stableBtn="Mark Stable"
+	snoozeBtn="Snooze"
+	buttonPressed=$(osascript -e "display alert \"Warning! MetaMask was updated!\" message \"last known version: $lastKnownVersion\n new version: $detectedVersion\" buttons {\"$stableBtn\",\"$snoozeBtn\"}")
 	if [[ "$buttonPressed" == "button returned:$stableBtn" ]]; then
 		writeVersion "$detectedVersion"
 		STATUS=1
@@ -50,3 +51,5 @@ if [ "$detectedVersion" != "$lastKnownVersion" ]; then
 fi
 
 [ $STATUS == 1 ] && echo "🟢" || echo "🔴"
+echo "---"
+echo "MetaMask version: $detectedVersion | color=white"
