@@ -1,16 +1,22 @@
 #!/bin/bash
 
-# Prints eth price and gas
+# Prints BTC price, eth price and FAST gas
 
 API_TOKEN="***REMOVED***"
-etherscanEthUrl="https://api.etherscan.io/api?module=stats&action=ethprice&apikey=$API_TOKEN"
-etherscanGasUrl="https://api.etherscan.io/api?module=gastracker&action=gasoracle&apikey=$API_TOKEN"
 
 function parseJson() {
 	json=$(cat)
 	path="$1"
 	python3 -c "print($json$path)"
 }
+
+function fmt() {
+	n="$1"
+	python3 -c "print( f'{int(round($n,0)):,}' )"
+}
+
+etherscanEthUrl="https://api.etherscan.io/api?module=stats&action=ethprice&apikey=$API_TOKEN"
+etherscanGasUrl="https://api.etherscan.io/api?module=gastracker&action=gasoracle&apikey=$API_TOKEN"
 
 ethPrice=$(curl -s "$etherscanEthUrl" | parseJson "['result']['ethusd']")
 gasPrice=$(curl -s "$etherscanGasUrl" | parseJson "['result']['FastGasPrice']")
@@ -25,8 +31,10 @@ btcPrice=$(python3 -c """
 btcBalance = $btcPairBalance / float(10**8)
 ethBalance = $ethPairBalance / float(10**18)
 ethPerBtc = ethBalance / float(btcBalance)
-btcPrice = int(round($ethPrice * ethPerBtc, 0))
-print(f'{btcPrice:,}')
+print($ethPrice * ethPerBtc)
 """)
 
-echo "💰${btcPrice}💰${ethPrice}⛽️${gasPrice}"
+ethRoundPrice=$(fmt "$ethPrice")
+btcRoundPrice=$(fmt "$btcPrice")
+
+echo "💰${btcRoundPrice}💰${ethRoundPrice}⛽️${gasPrice}"
