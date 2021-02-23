@@ -19,7 +19,7 @@ etherscanEthUrl="https://api.etherscan.io/api?module=stats&action=ethprice&apike
 etherscanGasUrl="https://api.etherscan.io/api?module=gastracker&action=gasoracle&apikey=$API_TOKEN"
 
 ethPrice=$(curl -s "$etherscanEthUrl" | parseJson "['result']['ethusd']")
-gasPrice=$(curl -s "$etherscanGasUrl" | parseJson "['result']['FastGasPrice']")
+gasPrice=$(curl -s "$etherscanGasUrl" | parseJson "['result']['ProposeGasPrice']")
 
 wbtcEthPairAddress="0xbb2b8038a1640196fbe3e38816f3e67cba72d940"
 wbtcAddress="0x2260fac5e5542a773aa44fbcfedf7c193bc2c599"
