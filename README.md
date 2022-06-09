@@ -1,9 +1,7 @@
 # bitbars
-Scripts that I use with bitbar
+Useful scripts for bitbar
 
 install with
 ```
 brew install --cask bitbar
 ```
-
-
