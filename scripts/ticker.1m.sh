@@ -2,7 +2,7 @@
 
 # Prints SP500, BTC price, ETH price, proposed gas
 
-. $(dirname "$0")/.env
+. $(dirname "$0")/../.env
 
 function parseJson() {
 	json=$(cat)

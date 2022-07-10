@@ -6,7 +6,7 @@ install with
 brew install --cask bitbar
 ```
 
-add `.env` file inside the scripts folder with: 
+add `.env` file to root folder with: 
 ```
 ETHERSCAN_KEY=...
 COINMARKETCAP_KEY=...
