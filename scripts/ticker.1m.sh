@@ -1,8 +1,6 @@
 #!/bin/bash
 
-# Prints SP500, BTC price, ETH price, proposed gas
-
-. $(dirname "$0")/../.env
+# Prints SP500, BTC price, ETH price, gas, time in LA NY UTC
 
 function parseJson() {
 	json=$(cat)
@@ -15,18 +13,19 @@ function fmt() {
 	python3 -c "print( f'{int(round($n,0)):,}' )"
 }
 
-gweiGas=$(fmt $(curl -s "https://api.etherscan.io/api?module=gastracker&action=gasoracle&apikey=$ETHERSCAN_KEY" | parseJson "['result']['ProposeGasPrice']"))
+result=$(curl -s "https://query1.finance.yahoo.com/v7/finance/quote?symbols=spy,btc-usd,eth-usd&fields=regularMarketPrice")
 
-result=$(curl -s "https://min-api.cryptocompare.com/data/pricemultifull?fsyms=ETH,BTC&tsyms=USD&api_key=${COINMARKETCAP_KEY}")
-priceETH=$(fmt $(echo $result | parseJson "['RAW']['ETH']['USD']['PRICE']"))
-priceBTC=$(fmt $(echo $result | parseJson "['RAW']['BTC']['USD']['PRICE']"))
-# priceBTC=$(fmt $(curl -s "https://min-api.cryptocompare.com/data/pricemultifull?fsyms=BTC&tsyms=USD&api_key=${COINMARKETCAP_KEY}" | parseJson "['RAW']['BTC']['USD']['PRICE']"))
+priceSP500=$(fmt $(echo $result | parseJson "['quoteResponse']['result'][0]['regularMarketPrice']"))
+priceBTC=$(fmt $(echo $result | parseJson "['quoteResponse']['result'][1]['regularMarketPrice']"))
+priceETH=$(fmt $(echo $result | parseJson "['quoteResponse']['result'][2]['regularMarketPrice']"))
+gasGwei=$(fmt $(curl -s "https://api.blocknative.com/gasprices/blockprices" | parseJson "['maxPrice']"))
 
-priceSP500=$(fmt $(curl -s "https://query1.finance.yahoo.com/v7/finance/quote?symbols=spy&fields=regularMarketPrice" | parseJson "['quoteResponse']['result'][0]['regularMarketPrice']"))
+time="⌚LA:$(TZ=America/Los_Angeles date +'%H') NY:$(TZ=America/New_York date +'%H') UTC:$(TZ=UTC date +'%H')"
 
-echo "💵${priceSP500}💰${priceBTC}💰${priceETH}⛽️${gweiGas}"
+echo "💵${priceSP500}💰${priceBTC}💰${priceETH}⛽️${gasGwei}"
 echo "---"
 echo "SP500: \$${priceSP500}"
 echo "Bitcoin: \$${priceBTC}"
 echo "Ethereum: \$${priceETH}"
-echo "Gas: ${gweiGas} gwei"
+echo "Gas: ${gasGwei} gwei"
+echo "$time"
