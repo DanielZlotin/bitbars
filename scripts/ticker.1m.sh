@@ -13,7 +13,7 @@ function fmt() {
 	python3 -c "print( f'{int(round($n,0)):,}' )"
 }
 
-result=$(curl -s "https://query1.finance.yahoo.com/v7/finance/quote?symbols=spy,btc-usd,eth-usd&fields=regularMarketPrice")
+result=$(curl -s "https://query1.finance.yahoo.com/v6/finance/quote?symbols=spy,btc-usd,eth-usd&fields=regularMarketPrice")
 
 priceSP500=$(fmt $(echo $result | parseJson "['quoteResponse']['result'][0]['regularMarketPrice']"))
 priceBTC=$(fmt $(echo $result | parseJson "['quoteResponse']['result'][1]['regularMarketPrice']"))
