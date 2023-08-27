@@ -79,7 +79,17 @@ priceETH=$(fmt $(echo $ethResponse | parseJson "['data']['priceHistoryWithTimest
 tipGwei=$(fmt $(echo $gasresponse | parseJson "['blockPrices'][0]['estimatedPrices'][0]['maxPriorityFeePerGas']") 0)
 maxGwei=$(fmt $(echo $gasresponse | parseJson "['blockPrices'][0]['estimatedPrices'][0]['maxFeePerGas']") 0)
 
-printf "💵${priceSP500}💰${priceBTC}💸${priceETH}⛽️${tipGwei}/${maxGwei}\n"
+if [ "$maxGwei" -le 50 ]; then
+  gasIcon="🍃"
+elif [ "$maxGwei" -le 100 ]; then
+  gasIcon="⛽️"
+elif [ "$maxGwei" -le 200 ]; then
+  gasIcon="🔥"
+else
+  gasIcon="💥"
+fi
+
+printf "💵${priceSP500}💰${priceBTC}💸${priceETH}${gasIcon}${tipGwei}/${maxGwei}\n"
 echo "---"
 echo "SP500: \$${priceSP500}"
 echo "Bitcoin: \$${priceBTC}"
